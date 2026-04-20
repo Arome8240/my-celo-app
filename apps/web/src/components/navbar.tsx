@@ -11,7 +11,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { ConnectButton } from "@/components/connect-button"
+import { MiniPayConnectButton } from "@/components/minipay-connect-button"
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -56,7 +56,7 @@ export function Navbar() {
                   </Link>
                 ))}
                 <div className="mt-6 pt-6 border-t">
-                  <ConnectButton />
+                  <MiniPayConnectButton size="default" className="w-full" />
                 </div>
               </nav>
             </SheetContent>
@@ -91,7 +91,7 @@ export function Navbar() {
           ))}
           
           <div className="flex items-center gap-3">
-            <ConnectButton />
+            <MiniPayConnectButton size="default" className="px-4 py-2 text-sm" />
           </div>
         </nav>
       </div>
