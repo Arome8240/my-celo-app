@@ -1,5 +1,6 @@
 import type { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox-viem";
+import "@nomicfoundation/hardhat-ethers";
 import "dotenv/config";
 
 const normalizedPrivateKey = process.env.PRIVATE_KEY
@@ -7,6 +8,9 @@ const normalizedPrivateKey = process.env.PRIVATE_KEY
     ? process.env.PRIVATE_KEY
     : `0x${process.env.PRIVATE_KEY}`
   : undefined;
+const celoRpcUrl = process.env.CELO_RPC_URL || "https://forno.celo.org";
+const celoSepoliaRpcUrl =
+  process.env.CELO_SEPOLIA_RPC_URL || "https://forno.celo-sepolia.celo-testnet.org/";
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -22,13 +26,13 @@ const config: HardhatUserConfig = {
   networks: {
     // Celo Mainnet
     celo: {
-      url: "https://forno.celo.org",
+      url: celoRpcUrl,
       accounts: normalizedPrivateKey ? [normalizedPrivateKey] : [],
       chainId: 42220,
     },
     // Celo Sepolia Testnet
     "celo-sepolia": {
-      url: "https://forno.celo-sepolia.celo-testnet.org/",
+      url: celoSepoliaRpcUrl,
       accounts: normalizedPrivateKey ? [normalizedPrivateKey] : [],
       chainId: 11142220,
     },
