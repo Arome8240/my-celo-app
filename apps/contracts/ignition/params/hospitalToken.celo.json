@@ -1,0 +1,10 @@
+{
+  "HospitalTokenModule": {
+    "name": "Hospital Network Token",
+    "symbol": "HNT",
+    "admin": "0xA8D9d84f838c72e5e02717Ee7c3B36b4528a86e3",
+    "initialRecipient": "0xA8D9d84f838c72e5e02717Ee7c3B36b4528a86e3",
+    "initialSupply": "1000000000000000000000000",
+    "maxSupply": "10000000000000000000000000"
+  }
+}
