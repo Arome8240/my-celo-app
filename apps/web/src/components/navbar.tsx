@@ -15,6 +15,7 @@ import { MiniPayConnectButton } from "@/components/minipay-connect-button"
 
 const navLinks = [
   { name: "Home", href: "/" },
+  { name: "Hospital", href: "/hospital" },
   { name: "Admin", href: "/admin" },
   { name: "Docs", href: "https://docs.celo.org", external: true },
 ]
