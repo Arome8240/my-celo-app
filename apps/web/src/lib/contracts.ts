@@ -1,5 +1,7 @@
 // HospitalToken contract configuration
-export const HOSPITAL_TOKEN_ADDRESS = "0xYourDeployedContractAddress" as const;
+export const HOSPITAL_TOKEN_ADDRESS = (process.env.NEXT_PUBLIC_HOSPITAL_TOKEN_ADDRESS || 
+  "0xYourDeployedContractAddress") as `0x${string}`;
+
 
 export const HOSPITAL_TOKEN_ABI = [
   // Read functions
