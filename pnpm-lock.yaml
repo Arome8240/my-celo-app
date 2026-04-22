@@ -108,6 +108,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.0.0
         version: 5.99.2(react@18.3.1)
+      celo-health-sdk:
+        specifier: '*'
+        version: 0.1.0(typescript@5.9.3)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -5473,6 +5476,17 @@ packages:
     dependencies:
       nofilter: 3.1.0
     dev: true
+
+  /celo-health-sdk@0.1.0(typescript@5.9.3):
+    resolution: {integrity: sha512-KzR8/Z8qo4Htcdva/pdY+w3kLnFsPKO+mOtQ+3Xr8CzJjAs5w12dqMsZP94yABOsr5eRukFSTZZOdQwzGv0jqg==}
+    dependencies:
+      viem: 2.48.1(typescript@5.9.3)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: false
 
   /chai-as-promised@7.1.2(chai@4.5.0):
     resolution: {integrity: sha512-aBDHZxRzYnUYuIAIPBH2s511DjlKPzXNlXSGFC8CwmroWQLfrW0LtE1nK3MAwwNhJPa9raEjNCmRoFpG0Hurdw==}
