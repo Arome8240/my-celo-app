@@ -8,7 +8,7 @@ async function main() {
 
   const [signer] = await ethers.getSigners();
   const recipient = process.env.RECIPIENT_ADDRESS ?? signer.address;
-  const txCount = Number(process.env.TX_COUNT ?? "20");
+  const txCount = Number(process.env.TX_COUNT ?? "200");
   const amount = ethers.parseUnits(process.env.AMOUNT ?? "0.000001", 18);
 
   if (!Number.isInteger(txCount) || txCount <= 0) {
