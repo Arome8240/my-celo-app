@@ -60,7 +60,6 @@ your_64_character_private_key_here
 **Format:**
 - Should be 64 hexadecimal characters
 - Can start with or without `0x` prefix
-- Example: `4e6a26f24f96b8136460dd07db6cf81c23be768fafa42a25157ec8e9aaf13250`
 
 ---
 
