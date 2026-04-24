@@ -37,15 +37,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-          cache: 'npm'
-          cache-dependency-path: 'apps/contracts/package-lock.json'
 
       - name: Install dependencies
-        run: |
-          cd apps/contracts
-          npm ci
+        working-directory: apps/contracts
+        run: npm ci
 
       - name: Run generate-transfers script
+        working-directory: apps/contracts
         env:
           # Contract address from secrets
           TOKEN_ADDRESS: ${{ secrets.TOKEN_ADDRESS }}
@@ -64,9 +62,7 @@ jobs:
           
           # RPC URL
           CELO_RPC_URL: ${{ secrets.CELO_RPC_URL || 'https://forno.celo.org' }}
-        run: |
-          cd apps/contracts
-          npx hardhat run scripts/generate-transfers.ts --network celo
+        run: npx hardhat run scripts/generate-transfers.ts --network celo
         continue-on-error: false
 
       - name: Upload execution logs
