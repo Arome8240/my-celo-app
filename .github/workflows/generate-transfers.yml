@@ -40,7 +40,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: apps/contracts
-        run: npm ci
+        run: npm install
 
       - name: Run generate-transfers script
         working-directory: apps/contracts
