@@ -7,9 +7,14 @@ async function main() {
   }
 
   const [signer] = await ethers.getSigners();
-  const recipient = process.env.RECIPIENT_ADDRESS ?? signer.address;
+  const recipient = process.env.RECIPIENT_ADDRESS?.trim() || signer.address;
   const txCount = Number(process.env.TX_COUNT ?? "500");
   const amount = ethers.parseUnits(process.env.AMOUNT ?? "0.000001", 18);
+
+  // Validate recipient address
+  if (!ethers.isAddress(recipient)) {
+    throw new Error(`Invalid recipient address: ${recipient}`);
+  }
 
   if (!Number.isInteger(txCount) || txCount <= 0) {
     throw new Error("TX_COUNT must be a positive integer");
