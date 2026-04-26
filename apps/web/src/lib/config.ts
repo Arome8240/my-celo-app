@@ -1,5 +1,10 @@
-export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x1C6CA7f7433026F5bEEA4602b1E75BF78A8f9275";
-export const CELO_RPC = "https://forno.celo.org";
+import { getWebEnv } from "@my-celo-app/config";
+
+// Get validated environment
+const env = getWebEnv();
+
+export const CONTRACT_ADDRESS = env.NEXT_PUBLIC_HOSPITAL_TOKEN_ADDRESS;
+export const CELO_RPC = env.NEXT_PUBLIC_CELO_RPC_URL;
 export const MINIPAY_FEE_CURRENCY = "0x765DE816845861e75A25fCA122bb6898B8B1282a" as const;
 
 export function shortenAddress(addr: string, head = 6, tail = 4): string {

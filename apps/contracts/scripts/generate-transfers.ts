@@ -1,15 +1,19 @@
 import { ethers } from "hardhat";
+import { getContractsEnv } from "@my-celo-app/config";
 
 async function main() {
-  const tokenAddress = process.env.TOKEN_ADDRESS;
+  // Get validated environment
+  const env = getContractsEnv();
+  
+  const tokenAddress = env.TOKEN_ADDRESS;
   if (!tokenAddress) {
     throw new Error("Missing TOKEN_ADDRESS env var");
   }
 
   const [signer] = await ethers.getSigners();
-  const recipient = process.env.RECIPIENT_ADDRESS?.trim() || signer.address;
-  const txCount = Number(process.env.TX_COUNT ?? "500");
-  const amount = ethers.parseUnits(process.env.AMOUNT ?? "0.000001", 18);
+  const recipient = env.RECIPIENT_ADDRESS?.trim() || signer.address;
+  const txCount = env.TX_COUNT;
+  const amount = ethers.parseUnits(env.AMOUNT, 18);
 
   // Validate recipient address
   if (!ethers.isAddress(recipient)) {

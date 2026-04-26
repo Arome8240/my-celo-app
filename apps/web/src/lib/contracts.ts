@@ -1,6 +1,10 @@
+import { getWebEnv } from "@my-celo-app/config";
+
+// Get validated environment
+const env = getWebEnv();
+
 // HospitalToken contract configuration
-export const HOSPITAL_TOKEN_ADDRESS = (process.env.NEXT_PUBLIC_HOSPITAL_TOKEN_ADDRESS || 
-  "0x209c0138c80C60a570333D03b980e1cA22880fE1") as `0x${string}`;
+export const HOSPITAL_TOKEN_ADDRESS = env.NEXT_PUBLIC_HOSPITAL_TOKEN_ADDRESS;
 
 
 export const HOSPITAL_TOKEN_ABI = [
