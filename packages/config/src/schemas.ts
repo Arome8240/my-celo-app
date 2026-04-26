@@ -103,7 +103,11 @@ export const contractsEnvSchema = z.object({
     .optional(),
 
   // Transaction generation
-  RECIPIENT_ADDRESS: ethereumAddressSchema.optional(),
+  RECIPIENT_ADDRESS: z
+    .string()
+    .optional()
+    .transform((val) => (val && val.trim() !== "" ? val : undefined))
+    .pipe(ethereumAddressSchema.optional()),
   TX_COUNT: positiveNumberSchema.default(1000),
   AMOUNT: z.string().default("0.000001"),
 });
