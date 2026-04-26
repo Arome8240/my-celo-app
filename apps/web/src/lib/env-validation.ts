@@ -6,6 +6,9 @@
  */
 
 import { validateWebEnv, EnvValidationError } from "@my-celo-app/config";
+import { getLogger } from "@my-celo-app/utils/logger";
+
+const logger = getLogger();
 
 /**
  * Validate environment variables
@@ -14,18 +17,19 @@ import { validateWebEnv, EnvValidationError } from "@my-celo-app/config";
 export function validateEnvironment(): void {
   try {
     validateWebEnv();
-    console.log("✅ Environment variables validated successfully");
+    logger.info("Environment variables validated successfully");
   } catch (error) {
     if (error instanceof EnvValidationError) {
-      console.error("\n" + "=".repeat(80));
-      console.error("❌ ENVIRONMENT VALIDATION FAILED");
-      console.error("=".repeat(80));
-      console.error(error.message);
-      console.error("=".repeat(80) + "\n");
+      logger.fatal("Environment validation failed", error, {
+        errors: error.errors.errors.map(err => ({
+          path: err.path.join("."),
+          message: err.message,
+        })),
+      });
       
       // In production, fail fast
       if (process.env.NODE_ENV === "production") {
-        console.error("🚨 Cannot start application with invalid configuration");
+        logger.fatal("Cannot start application with invalid configuration");
         process.exit(1);
       }
       

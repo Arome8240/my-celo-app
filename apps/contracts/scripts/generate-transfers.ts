@@ -1,5 +1,8 @@
 import { ethers } from "hardhat";
 import { getContractsEnv } from "@my-celo-app/config";
+import { getLogger, logTransaction, logTransactionSuccess, logTransactionFailure } from "@my-celo-app/utils/logger";
+
+const logger = getLogger();
 
 async function main() {
   // Get validated environment
@@ -7,6 +10,7 @@ async function main() {
   
   const tokenAddress = env.TOKEN_ADDRESS;
   if (!tokenAddress) {
+    logger.fatal("Missing TOKEN_ADDRESS environment variable");
     throw new Error("Missing TOKEN_ADDRESS env var");
   }
 
@@ -17,40 +21,60 @@ async function main() {
 
   // Validate recipient address
   if (!ethers.isAddress(recipient)) {
+    logger.fatal("Invalid recipient address", undefined, { recipient });
     throw new Error(`Invalid recipient address: ${recipient}`);
   }
 
   if (!Number.isInteger(txCount) || txCount <= 0) {
+    logger.fatal("Invalid transaction count", undefined, { txCount });
     throw new Error("TX_COUNT must be a positive integer");
   }
 
   const token = await ethers.getContractAt("HospitalToken", tokenAddress, signer);
 
-  console.log(`Network: ${(await ethers.provider.getNetwork()).name}`);
-  console.log(`Sender: ${signer.address}`);
-  console.log(`Recipient: ${recipient}`);
-  console.log(`Token: ${tokenAddress}`);
-  console.log(`Tx count: ${txCount}`);
-  console.log(`Amount each: ${amount.toString()} wei`);
+  const network = await ethers.provider.getNetwork();
+  logger.info("Starting token transfer generation", {
+    network: network.name,
+    sender: signer.address,
+    recipient,
+    tokenAddress,
+    txCount,
+    amount: amount.toString(),
+  });
 
   // Get starting nonce
   let nonce = await ethers.provider.getTransactionCount(signer.address, "pending");
-  console.log(`Starting nonce: ${nonce}`);
+  logger.debug("Starting nonce retrieved", { nonce });
 
   for (let i = 1; i <= txCount; i++) {
     try {
       const tx = await token.transfer(recipient, amount, { nonce });
-      console.log(`[${i}/${txCount}] sent: ${tx.hash} (nonce: ${nonce})`);
+      
+      logTransaction(`Transfer ${i}/${txCount} sent`, {
+        txHash: tx.hash,
+        from: signer.address,
+        to: recipient,
+        value: amount.toString(),
+        network: network.name,
+      });
+      
       await tx.wait();
+      logTransactionSuccess(tx.hash, { nonce });
       nonce++; // Increment nonce for next transaction
     } catch (error: any) {
-      console.error(`[${i}/${txCount}] failed:`, error.message);
+      logTransactionFailure(undefined, error, {
+        from: signer.address,
+        to: recipient,
+        value: amount.toString(),
+        nonce,
+        attempt: i,
+      });
       
       // If nonce error, resync and retry
       if (error.message.includes("nonce")) {
-        console.log("Nonce error detected, resyncing...");
+        logger.warn("Nonce error detected, resyncing", { oldNonce: nonce });
         nonce = await ethers.provider.getTransactionCount(signer.address, "pending");
-        console.log(`Resynced nonce: ${nonce}`);
+        logger.info("Nonce resynced", { newNonce: nonce });
         i--; // Retry this transaction
         continue;
       }
@@ -59,10 +83,14 @@ async function main() {
     }
   }
 
-  console.log(`Completed ${txCount} transfer transactions.`);
+  logger.info("Transfer generation completed successfully", {
+    totalTransactions: txCount,
+    recipient,
+    totalAmount: (BigInt(amount.toString()) * BigInt(txCount)).toString(),
+  });
 }
 
 main().catch((error) => {
-  console.error(error);
+  logger.fatal("Script execution failed", error);
   process.exitCode = 1;
 });
