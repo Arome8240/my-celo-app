@@ -6,7 +6,8 @@ import './globals.css';
 import '@/lib/env-validation';
 
 import { Navbar } from '@/components/navbar';
-import { WalletProvider } from "@/components/wallet-provider"
+import { WalletProvider } from "@/components/wallet-provider";
+import { ErrorBoundary } from "@my-celo-app/utils/errors";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,14 +29,16 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         {/* Navbar is included on all pages */}
-        <div className="relative flex min-h-screen flex-col">
-          <WalletProvider>
-            <Navbar />
-            <main className="flex-1">
-              {children}
-            </main>
-          </WalletProvider>
-        </div>
+        <ErrorBoundary>
+          <div className="relative flex min-h-screen flex-col">
+            <WalletProvider>
+              <Navbar />
+              <main className="flex-1">
+                {children}
+              </main>
+            </WalletProvider>
+          </div>
+        </ErrorBoundary>
       </body>
     </html>
   );

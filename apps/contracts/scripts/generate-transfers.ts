@@ -1,6 +1,7 @@
 import { ethers } from "hardhat";
 import { getContractsEnv } from "@my-celo-app/config";
 import { getLogger, logTransaction, logTransactionSuccess, logTransactionFailure } from "@my-celo-app/utils/logger";
+import { ValidationError, BlockchainError, handleAsyncError } from "@my-celo-app/utils/errors";
 
 const logger = getLogger();
 
@@ -22,12 +23,12 @@ async function main() {
   // Validate recipient address
   if (!ethers.isAddress(recipient)) {
     logger.fatal("Invalid recipient address", undefined, { recipient });
-    throw new Error(`Invalid recipient address: ${recipient}`);
+    throw new ValidationError(`Invalid recipient address: ${recipient}`, { recipient });
   }
 
   if (!Number.isInteger(txCount) || txCount <= 0) {
     logger.fatal("Invalid transaction count", undefined, { txCount });
-    throw new Error("TX_COUNT must be a positive integer");
+    throw new ValidationError("TX_COUNT must be a positive integer", { txCount });
   }
 
   const token = await ethers.getContractAt("HospitalToken", tokenAddress, signer);
