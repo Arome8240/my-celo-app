@@ -13,3 +13,6 @@
 
 // Re-export logger
 export * from "./logger";
+
+// Re-export errors
+export * from "./errors";
